@@ -1022,70 +1022,104 @@
                 padding: 60px 20px;
             }
         }
-        /* Catalog Section */
+        /* =======================
+   Catalog Section (Mobile First)
+   ======================= */
+
 .catalog-section {
-    padding: 40px 20px;
+    padding: 24px 16px;
     max-width: 1600px;
     margin: 0 auto;
 }
 
+/* ICON ROW */
 .catalog-icons {
     display: flex;
-    justify-content: space-between;
-    gap: 24px;
+    gap: 18px;
     overflow-x: auto;
-    padding-bottom: 20px;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 12px;
+}
+
+.catalog-icons::-webkit-scrollbar {
+    display: none;
 }
 
 .catalog-item {
-    min-width: 90px;
+    flex: 0 0 auto;
+    width: 72px;
     text-align: center;
+    scroll-snap-align: start;
     cursor: pointer;
-    transition: transform 0.3s ease;
 }
 
 .catalog-item img {
-    width: 48px;
-    height: 48px;
+    width: 42px;
+    height: 42px;
+    margin: 0 auto;
     opacity: 0.85;
 }
 
 .catalog-item span {
     display: block;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
-    margin-top: 8px;
-    letter-spacing: 0.5px;
+    margin-top: 6px;
+    white-space: nowrap;
 }
 
-.catalog-item:hover {
-    transform: translateY(-4px);
-}
-
+/* FILTER PILLS */
 .catalog-filters {
     display: flex;
-    justify-content: center;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-top: 20px;
+    gap: 10px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 12px 0;
+    margin-top: 12px;
+}
+
+.catalog-filters::-webkit-scrollbar {
+    display: none;
 }
 
 .catalog-pill {
-    padding: 10px 24px;
-    border-radius: 50px;
+    flex: 0 0 auto;
+    padding: 8px 18px;
+    border-radius: 999px;
     border: 1.5px solid #0a0a0a;
     background: transparent;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
+    white-space: nowrap;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
 }
 
-.catalog-pill.active,
-.catalog-pill:hover {
+.catalog-pill.active {
     background: #0a0a0a;
     color: white;
 }
+
+/* =======================
+   Desktop Enhancement
+   ======================= */
+@media (min-width: 768px) {
+    .catalog-icons {
+        justify-content: space-between;
+        overflow-x: visible;
+    }
+
+    .catalog-item {
+        width: auto;
+    }
+
+    .catalog-filters {
+        justify-content: center;
+        overflow-x: visible;
+    }
+}
+
 
     </style>
 </head>
@@ -1277,6 +1311,26 @@
     </footer>
 
     <script>
+        function filterProducts(category) {
+    document.querySelectorAll('.filter-tab, .catalog-pill').forEach(el => {
+        el.classList.remove('active');
+    });
+
+    if (window.event && window.event.target) {
+        window.event.target.classList.add('active');
+    }
+
+    renderProducts(category);
+
+    // auto-scroll to products on mobile
+    if (window.innerWidth < 768) {
+        document.getElementById('shop').scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
+}
+
         // Products Data
         const products = [
             { id: 1, name: 'Wireless Earbuds Pro', price: 129, emoji: '🎧', category: 'new', badge: 'NEW' },
